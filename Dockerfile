@@ -1,12 +1,16 @@
-FROM continuumio/anaconda3
+FROM condaforge/miniforge3
 
-RUN apt update -y
-RUN apt upgrade -y
-RUN apt search g++
-RUN apt install -y build-essential
+ARG PCANGSD_VERSION="v1.36.0"
+ENV WKDIR=/opt/pcangsd
 
-RUN git clone https://github.com/Rosemeis/pcangsd.git
-RUN cd pcangsd && \
-    conda env create -f environment.yml && \
-    pip3 install --user -r requirements.txt && \
-    pip3 install .
+RUN apt update -y  && \
+    apt upgrade -y && \
+    apt install -y build-essential
+
+WORKDIR $WKDIR
+RUN git clone https://github.com/Rosemeis/pcangsd.git $WKDIR && \
+    git checkout $PCANGSD_VERSION                            && \
+    conda update -n base -c conda-forge conda                && \
+    conda env create -f $WKDIR/environment.yml               && \
+    echo "conda activate pcangsd" >> ~/.bashrc
+SHELL ["/bin/bash", "--login", "-c"]
