@@ -12,5 +12,5 @@ RUN git clone https://github.com/Rosemeis/pcangsd.git $WKDIR && \
     git checkout $PCANGSD_VERSION                            && \
     conda update -n base -c conda-forge conda                && \
     conda env create -f $WKDIR/environment.yml               && \
-    echo "conda activate pcangsd" >> ~/.bashrc
+    echo "conda activate pcangsd" >> /opt/pcangsd/env.sh
 SHELL ["/bin/bash", "--login", "-c"]
